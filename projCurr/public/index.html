@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Currency Identification</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdn.rawgit.com/mladenplavsic/bootstrap-navbar-sidebar/3bd282bd/docs/navbar-fixed-left.min.css">
+    <script src="./p5.min.js"></script>
+    <script src="./addons/p5.sound.min.js"></script>
+    <script src="./ml5.min.js"></script>
+    <script src="./sketch.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin-top: 5%;
+            color: rgb(0, 0, 0);
+            background-color: rgb(255, 145, 56);
+            font-weight: bolder;
+
+        }
+
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        .row {
+            height: 100%;
+        }
+
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            padding-top: 20px;
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        .carousel.slide {
+            height: auto;
+            width: auto;
+        }
+
+
+        .carousel-inner>.item>img {
+            height: auto;
+            width: auto;
+        }
+
+        a.two:link {
+            color: #ff0000;
+        }
+
+        a.two:hover {
+            font-size: 120%;
+            color: rgb(255, 130, 92);
+        }
+
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: rgb(26, 25, 25);
+            color: white;
+            padding: 15px;
+        }
+
+        .responsiveImg {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+        }
+
+
+
+
+
+        /* Extra small devices (phones, 600px and down) */
+        @media only screen and (max-width: 360px) {
+            body {
+                padding-top: 15%;
+                font-weight: 200;
+                font-size: medium;
+
+            }
+
+            .sidenav {
+                height: auto;
+            }
+
+            .row.content {
+                height: auto;
+            }
+
+            .carousel.slide {
+                height: auto;
+                width: auto;
+            }
+
+
+            .carousel-inner>.item>img {
+                height: auto;
+                width: auto;
+            }
+        }
+
+
+        @media only screen and (max-width: 768px) {
+            body {
+                margin: 5%;
+                font-weight: 200;
+                font-size: medium;
+
+            }
+
+            .sidenav {
+                height: auto;
+            }
+
+            .row.content {
+                height: auto;
+            }
+
+            .carousel.slide {
+                height: auto;
+                width: auto;
+            }
+
+
+
+
+            .carousel-inner>.item>img {
+                height: auto;
+                width: auto;
+            }
+        }
+
+
+        @media only screen and (min-width: 1280px) {
+            body {
+                font-size: medium;
+
+            }
+
+            .sidenav {
+                height: auto;
+            }
+
+            .row.content {
+                height: auto;
+            }
+
+            .carousel.slide {
+                height: auto;
+                width: auto;
+            }
+
+
+            .carousel-inner>.item>img {
+                height: auto;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar">
+            <h3 align="center"
+                style="color: azure; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; ">
+                Indian Currency Detection
+            </h3>
+        </div>
+
+    </div>
+</nav>
+<nav class="navbar navbar-inverse navbar-fixed-left">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+            aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <img src="./images/CurrencySymbol.gif" alt="Image" width="50px" height="50px">
+    </div>
+
+    <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Contact</a></li>
+            <li class="dropdown-toggle ">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">Contents <span class="caret"></span></a>
+                <ul class="dropdown-menu collapse">
+                    <p><a class="two" href="#camera-div">Camera</a></p>
+                    <p><a class="two" href="#image-div">Image Browsing</a></p>
+                    <p><a class="two" href="#about-div">About</a></p>
+                    <p><a class="two" href="#description-div">Description</a></p>
+                    <p><a class="two" href="#myCarousel">Currencies</a></p>
+
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<body>
+
+
+    <div class="container-fluid text-center">
+        <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 center"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 center well">
+                <h4 style="color: darkred;"><b><u>CURRENCIES</u></b></h4>
+
+                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#myCarousel" data-slide-to="1" class="active"></li>
+                    </ol>
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner" role="listbox">
+                        <div class="item active">
+                            <img src="images/10Front.png" alt="Image">
+                        </div>
+
+                        <div class="item accept">
+                            <img src="images/10OldFront.png" alt="Image">
+                        </div>
+
+                        <div class="item accept">
+                            <img src="images/20Front.png" alt="Image">
+                        </div>
+
+                        <div class="item accept">
+                            <img src="images/20OldFront.png" alt="Image">
+                        </div>
+
+                        <div class="item accept">
+                            <img src="images/50Front.png" alt="Image">
+                        </div>
+
+                        <div class="item accept">
+                            <img src="images/50FrontOld.png" alt="Image">
+                        </div>
+
+                        <div class="item accept">
+                            <img src="images/100OldFront.png" alt="Image">
+                        </div>
+
+
+                        <div class="item accept">
+                            <img src="images/100Front.png" alt="Image">
+                        </div>
+
+                        <div class="item accept">
+                            <img src="images/200Front.png" alt="Image">
+                        </div>
+
+                        <div class="item accept">
+                            <img src="images/500Front.png" alt="Image">
+                        </div>
+
+                        <div class="item accept">
+                            <img src="images/2000Front.png" alt="Image">
+                        </div>
+                    </div>
+
+                    <!-- Left and right controls -->
+                    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 center"></div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 center"></div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6 center">
+                <div class="well" id="about-div">
+                    <div class="well">
+                        <h4 style="color: darkred;"><b><u>ABOUT</u></b></h4>
+                        <p>
+                            <p>You can predict either by browsing the image or live camera. </p>
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 col-md-3 col-lg-3 center"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 center"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 center">
+
+                <div class="well" id="description-div">
+                    <div class="well">
+
+                        <h4 style="color: darkred;"><b><u>DESCRIPTION</u></b></h4>
+                        <p>You can find all the Indian Currencies which are available to detect using through live
+                            camera or browsing an image
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 col-md-3 col-lg-3 center"></div>
+        </div>
+
+
+
+
+        <!-- <div class="row content" style="padding: 1%;"> -->
+        <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 center"></div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6 center well" id="camera-div">
+
+                <div class=" row well">
+                    <h4 align=" center" style="color: darkred;"><b>CAMERA FRAME</b></h4>
+
+                    <div class="col-sm-12">
+                        <div id="sketch-holder"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 center"></div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-3 col-md-3 col-lg-3 center"></div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6  center well" id="image-div">
+
+                <div class="row well">
+                    <h4 align=" center" style="color: darkred;"><b>IMAGE FRAME</b></h4>
+
+                    <div class="col-sm-6">
+                        <p>
+                            <input type="file" accept="image/*" name="image" id="file" onchange="loadFile(event)"
+                                style="display: none;">
+                        </p>
+                        <p>
+                            <label for="file" style="cursor: pointer;">
+                                <a>Browse Image</a>
+                            </label>
+                        </p>
+                        <p>
+                            <button type="button" class="btn btn-success btn-sm" onclick="classifyImg()">
+                                classify image
+                            </button>
+                        </p>
+                        <p>
+                            <textarea id="out" rows="1" cols="10" placeholder="output"></textarea>
+                        </p>
+                        <p>
+                            <button type="button" class="btn btn-danger btn-sm" style="font-size: smaller;"
+                                onclick="document.getElementById('out').value = ''">Clear
+                                Output</button>
+                        </p>
+                    </div>
+                    <div class="col-sm-6">
+
+                        <p>
+                            <img class="responsiveImg" id="output" width="400" height="250" />
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 center"></div>
+
+        </div>
+    </div>
+
+</body>
+
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
+    <div class="footer-copyright text-center py-3" style="color: aliceblue; padding: 1%;">© 2020 Copyright:
+        <a href="https://mdbootstrap.com/"> MDBootstrap.com</a>
+    </div>
+</nav>
+
+</html>
