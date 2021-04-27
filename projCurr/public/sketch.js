@@ -55,7 +55,6 @@ let imageCurr;
 		// Store the label and classify again!
 		label = results[0].label;
 		classifyVideo();
-		console.log(label);
 	}
   
 	// Make a prediction with a selected image
@@ -64,6 +63,8 @@ let imageCurr;
 		classifier.predict(document.getElementById('output'), function(err, results) {
 			outputPred = results[0].label;
 			document.getElementById('out').innerHTML = outputPred;
+			console.log(label);
+
 			
 		});
 	}
