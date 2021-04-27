@@ -44,7 +44,15 @@ let imageCurr;
 		fill(255);
 		text(label, width / 2, height - 16);
 	}
-	
+
+	function onclicked(){
+		resizeCanvas(250, 200);
+	}
+
+	function dbClick(){
+		resizeCanvas(350, 200);
+	}
+
 	// STEP 3: Get the classification!
 	function gotResults(error, results) {
 		// Something went wrong!
@@ -63,8 +71,8 @@ let imageCurr;
 		classifier.predict(document.getElementById('output'), function(err, results) {
 			outputPred = results[0].label;
 			document.getElementById('out').innerHTML = outputPred;
-			console.log(label);
-
-			
+			console.log(label);			
 		});
 	}
+
+	// document.getElementById("mouseClick").onclick = mousePressed;
